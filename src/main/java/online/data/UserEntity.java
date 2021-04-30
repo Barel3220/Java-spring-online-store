@@ -1,5 +1,9 @@
 package online.data;
 
+import org.springframework.data.mongodb.core.mapping.Document;
+import org.springframework.data.annotation.Id;
+
+@Document(collection="USERS")
 public class UserEntity implements OnlineStoreEntity<String> {
 	private String key;
 	private String userOnlineStore;
@@ -19,6 +23,7 @@ public class UserEntity implements OnlineStoreEntity<String> {
 	}
 
 	@Override
+	@Id
 	public String getKey() {
 		return key;
 	}

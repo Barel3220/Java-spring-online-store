@@ -1,8 +1,11 @@
 package online.data.util;
 
+import org.springframework.stereotype.Component;
+
 import online.data.UserEntity;
 import online.data.UserRole;
 
+@Component
 public class EntityFactoryImplementation implements EntityFactory {
 
 	@Override
