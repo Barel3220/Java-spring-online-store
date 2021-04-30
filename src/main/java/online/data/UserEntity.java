@@ -25,12 +25,16 @@ public class UserEntity implements OnlineStoreEntity<String> {
 	@Override
 	@Id
 	public String getKey() {
+		key = this.userOnlineStore + "#" + this.userEmail;
 		return key;
 	}
 
 	@Override
 	public void setKey(String key) {
 		this.key = key;
+		String[] temp = this.key.split("#");
+		this.userOnlineStore = temp[0];
+		this.userEmail = temp[1];
 	}
 
 	public String getUserOnlineStore() {
