@@ -76,5 +76,5 @@ public class CatalogEntity implements OnlineStoreEntity<String> {
 
 	public void setCreatorEmail(String creatorEmail) {
 		this.creatorEmail = creatorEmail;
-	}	
+	}
 }

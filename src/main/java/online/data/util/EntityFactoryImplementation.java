@@ -4,6 +4,7 @@ import java.util.Map;
 
 import org.springframework.stereotype.Component;
 
+import online.data.ActionEntity;
 import online.data.CatalogEntity;
 import online.data.ItemEntity;
 import online.data.UserEntity;
@@ -30,6 +31,13 @@ public class EntityFactoryImplementation implements EntityFactory {
 			boolean expired, int amountInStock, Map<String, Object> moreAttributes) {
 		ItemEntity item = new ItemEntity(catalogId, itemOnlineStore, creatorEmail, name, price, expired, amountInStock, moreAttributes);
 		return item;
+	}
+
+	@Override
+	public ActionEntity createNewAction(String itemId, String onlineStore, String actionType, String paymentMethod,
+			float totalPrice, int amount) {
+		ActionEntity action = new ActionEntity(itemId, onlineStore, actionType, paymentMethod, totalPrice, amount);
+		return action;
 	}
 
 }
