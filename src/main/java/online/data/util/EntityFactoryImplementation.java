@@ -1,8 +1,11 @@
 package online.data.util;
 
+import java.util.Map;
+
 import org.springframework.stereotype.Component;
 
 import online.data.CatalogEntity;
+import online.data.ItemEntity;
 import online.data.UserEntity;
 import online.data.UserRole;
 
@@ -22,4 +25,12 @@ public class EntityFactoryImplementation implements EntityFactory {
 		return catalog;
 	}
 
+	@Override
+	public ItemEntity createNewItem(String catalogId, String itemOnlineStore, String creatorEmail, String name, String price,
+			boolean expired, int amountInStock, Map<String, Object> moreAttributes) {
+		ItemEntity item = new ItemEntity(catalogId, itemOnlineStore, creatorEmail, name, price, expired, amountInStock, moreAttributes);
+		return item;
+	}
+
 }
+

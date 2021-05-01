@@ -38,13 +38,16 @@ public class RdbCatalogDao implements AdvancedCatalogDao {
 		catalog.setKey(catalog.getCatalogOnlineStore() + "#" + idCreator.getId());
 		
 		// SQL INSERT
-		if (!this.catalogCrud.existsById(catalog.getKey())) {
-			CatalogEntity catalogEntity = this.catalogCrud.save(catalog);
-			this.idCreatorCrud.delete(idCreator);
-			return catalogEntity;
-		}
+		if (!this.catalogCrud.existsById(catalog.getKey()))
+			if (!checkDuplicates(catalog)) {
+				CatalogEntity catalogEntity = this.catalogCrud.save(catalog);
+				this.idCreatorCrud.delete(idCreator);
+				return catalogEntity;
+			}
+			else
+				throw new RuntimeException("Catalog Already Exists by Value");
 		else
-			throw new RuntimeException("Catalog already exists, id: " + catalog.getKey());
+			throw new RuntimeException("Catalog Already Exists, Id: " + catalog.getKey());
 	}
 
 	@Override
@@ -63,7 +66,7 @@ public class RdbCatalogDao implements AdvancedCatalogDao {
 
 	@Override
 	@Transactional
-	public void update(CatalogEntity element) {
+	public void update(CatalogEntity catalog) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -85,6 +88,18 @@ public class RdbCatalogDao implements AdvancedCatalogDao {
 	@Transactional(readOnly = true)
 	public List<CatalogEntity> readAll(int size, int page) {
 		return this.catalogCrud.findAll(PageRequest.of(page, size)).getContent();
+	}
+	
+	public boolean checkDuplicates(CatalogEntity catalog) {
+		List<CatalogEntity> list = this.readAll();
+		for (CatalogEntity catalogEntity : list) {
+			if (catalog.getName() == catalogEntity.getName()
+					&& catalog.getCatalogOnlineStore() == catalogEntity.getCatalogOnlineStore()
+					&& catalog.getCreatorEmail() == catalogEntity.getCreatorEmail()
+					&& catalog.isExpired() == catalogEntity.isExpired())
+				return false;
+		}
+		return true;
 	}
 
 }

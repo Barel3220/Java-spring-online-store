@@ -39,8 +39,8 @@ public class CatalogServiceImplementation implements CatalogService {
 	}
 
 	@Override
-	public CatalogEntity getSpecificCatalog(String catalogOnlineStore, String creatorEmail) {
-		Optional<CatalogEntity> catalog = this.advancedCatalogDao.readById(catalogOnlineStore + "#" + creatorEmail);
+	public CatalogEntity getSpecificCatalog(String catalogOnlineStore, String catalogId) {
+		Optional<CatalogEntity> catalog = this.advancedCatalogDao.readById(catalogOnlineStore + "#" + catalogId);
 		if (catalog.isPresent())
 			return catalog.get();
 		else

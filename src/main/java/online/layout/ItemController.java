@@ -14,61 +14,61 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import online.dao.CatalogNotFoundException;
-import online.logic.CatalogService;
+import online.dao.ItemNotFoundException;
+import online.logic.ItemService;
 
 @RestController
-public class CatalogController {
-	private CatalogService catalogService;
+public class ItemController {
+	private ItemService itemService;
 	
 	@Autowired
-	public void setCatalogService(CatalogService catalogService) {
-		this.catalogService = catalogService;
+	public void setItemService(ItemService itemService) {
+		this.itemService = itemService;
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.POST,
-			path="/onlinestore/newcatalog/{userOnlineStore}/{userEmail}",
+			path="/onlinestore/newitem/{userOnlineStore}/{userEmail}",
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public CatalogBoundary publish (
+	public ItemBoundary publish (
 			@PathVariable("userOnlineStore") String userOnlineStore, 
 			@PathVariable("userEmail") String userEmail,
-			@RequestBody CatalogBoundary catalog) {
+			@RequestBody ItemBoundary item) {
 		
-		String role = this.catalogService.checkUserRole(userOnlineStore, userEmail, "");
-		return new CatalogBoundary(
-				this.catalogService
-					.publishNewCatalog(
-							catalog.toEntity(), role));
+		String role = this.itemService.checkUserRole(userOnlineStore, userEmail, "");
+		return new ItemBoundary(
+				this.itemService
+					.publishNewItem(
+							item.toEntity(), role));
 	}
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path= "/onlinestore/admin/catalogs/{userOnlineStore}/{userEmail}",
+			path= "/onlinestore/admin/items/{userOnlineStore}/{userEmail}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public CatalogBoundary[] getCatalogs (
+	public ItemBoundary[] getCatalogs (
 			@PathVariable("userOnlineStore") String userOnlineStore, 
 			@PathVariable("userEmail") String userEmail,
 			@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			@RequestParam(name="page", required=false, defaultValue="0") int page) {
 		
-		String role = this.catalogService.checkUserRole(userOnlineStore, userEmail, "");
+		String role = this.itemService.checkUserRole(userOnlineStore, userEmail, "");
 		return 
-			this.catalogService
-				.getCatalogs(size, page, role) // CatalogEntity List	
-			.stream() // CatalogEntity Stream
-			.map(CatalogBoundary::new) // CatalogBoundary Stream
-			.collect(Collectors.toList()) // CatalogBoundary List
-			.toArray(new CatalogBoundary[0]); // CatalogBoundary[]
+			this.itemService
+				.getItems(size, page, role) // ItemEntity List	
+			.stream() // ItemEntity Stream
+			.map(ItemBoundary::new) // ItemBoundary Stream
+			.collect(Collectors.toList()) // ItemBoundary List
+			.toArray(new ItemBoundary[0]); // ItemBoundary[]
 	}
 	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
-	public ErrorMessage handleException(CatalogNotFoundException e){
+	public ErrorMessage handleException(ItemNotFoundException e){
 		String message = e.getMessage();
 		if (message == null || message.trim().isEmpty()) {
-			message = "Couldn't Find Catalog";
+			message = "Couldn't Find Item";
 		}
 		return new ErrorMessage(message);
 	}
