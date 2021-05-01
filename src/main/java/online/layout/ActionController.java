@@ -31,16 +31,13 @@ public class ActionController {
 			path="/onlinestore/newaction/{userOnlineStore}/{userEmail}",
 			consumes=MediaType.APPLICATION_JSON_VALUE,
 			produces=MediaType.APPLICATION_JSON_VALUE)
-	public ActionBoundary publish (
+	public Object publish (
 			@PathVariable("userOnlineStore") String userOnlineStore, 
 			@PathVariable("userEmail") String userEmail,
 			@RequestBody ActionBoundary action) {
 		
 		String role = this.actionService.checkUserRole(userOnlineStore, userEmail, "");
-		return new ActionBoundary(
-				this.actionService
-					.publishNewAction(
-							action.toEntity(), role));
+		return this.actionService.publishNewAction(action.toEntity(), role);
 	}
 	
 	@RequestMapping(

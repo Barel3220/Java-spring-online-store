@@ -63,6 +63,27 @@ public class ItemController {
 			.toArray(new ItemBoundary[0]); // ItemBoundary[]
 	}
 	
+	@RequestMapping(
+			method=RequestMethod.GET,
+			path= "/onlinestore/admin/items/{userOnlineStore}/{userEmail}/{catalogId}",
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public ItemBoundary[] getCatalogs (
+			@PathVariable("userOnlineStore") String userOnlineStore, 
+			@PathVariable("userEmail") String userEmail,
+			@PathVariable("catalogId") String catalogId,
+			@RequestParam(name="size", required=false, defaultValue="10") int size, 
+			@RequestParam(name="page", required=false, defaultValue="0") int page) {
+		
+		String role = this.itemService.checkUserRole(userOnlineStore, userEmail, "");
+		return 
+			this.itemService
+				.getItemsByCatalogId(size, page, role, catalogId) // ItemEntity List	
+			.stream() // ItemEntity Stream
+			.map(ItemBoundary::new) // ItemBoundary Stream
+			.collect(Collectors.toList()) // ItemBoundary List
+			.toArray(new ItemBoundary[0]); // ItemBoundary[]
+	}
+	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage handleException(ItemNotFoundException e){

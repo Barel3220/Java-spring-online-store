@@ -67,8 +67,19 @@ public class RdbItemDao implements AdvancedItemDao {
 	@Override
 	@Transactional
 	public void update(ItemEntity item) {
-		// TODO Auto-generated method stub
+		ItemEntity found = this.readById(item.getKey())
+				.orElseThrow(() -> new RuntimeException("Invalid Item Key: " + item.getKey()));
 		
+		if (item.getName() != null)
+			found.setName(item.getName());
+		
+		if (item.getPrice() != null || !item.getPrice().trim().isEmpty())
+			found.setPrice(item.getPrice());
+		
+		if (item.getAmountInStock() != 0)
+			found.setAmountInStock(item.getAmountInStock());
+		
+		this.itemCrud.save(found);
 	}
 
 	@Override
@@ -90,6 +101,11 @@ public class RdbItemDao implements AdvancedItemDao {
 		return this.itemCrud.findAll(PageRequest.of(page, size)).getContent();
 	}
 	
+	@Override
+	public List<ItemEntity> readAllByCatalogId(int size, int page, String catalogId) {
+		return this.itemCrud.findAllByCatalogId(catalogId, PageRequest.of(page, size));
+	}
+	
 	public boolean checkDuplicates(ItemEntity item) {
 		List<ItemEntity> list = this.readAll();
 		for (ItemEntity itemEntity : list) {
@@ -103,6 +119,5 @@ public class RdbItemDao implements AdvancedItemDao {
 				return false;
 		}
 		return true;
-	}
-	
+	}	
 }

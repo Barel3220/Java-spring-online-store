@@ -37,6 +37,14 @@ public class ItemServiceImplementation implements ItemService {
 		roles(role);
 		return this.advancedItemDao.readAll(size, page);
 	}
+	
+	@Override
+	public List<ItemEntity> getItemsByCatalogId(int size, int page, String role, String catalogId) {
+		if (role == "customer")
+			return this.advancedItemDao.readAllByCatalogId(size, page, catalogId);		
+		else
+			throw new UserRoleException("User MUST be Customer to complete this operation");
+	}
 
 	@Override
 	@UserRoleValidation
