@@ -116,8 +116,8 @@ public class RdbItemDao implements AdvancedItemDao {
 					&& item.getPrice() == itemEntity.getPrice()
 					&& item.getAmountInStock() == itemEntity.getAmountInStock()
 					&& item.isExpired() == itemEntity.isExpired())
-				return false;
+				return true;
 		}
-		return true;
+		return false;
 	}	
 }
