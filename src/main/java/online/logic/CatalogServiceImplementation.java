@@ -37,6 +37,11 @@ public class CatalogServiceImplementation implements CatalogService {
 		roles(role);
 		return this.advancedCatalogDao.readAll(size, page);
 	}
+	
+	@Override
+	public List<CatalogEntity> getCatalogsByCatalogOnlineStore(int size, int page, String catalogOnlineStore) {
+		return this.advancedCatalogDao.readAllByCatalogOnlineStore(size, page, catalogOnlineStore);
+	}
 
 	@Override
 	public CatalogEntity getSpecificCatalog(String catalogOnlineStore, String catalogId) {
@@ -69,5 +74,4 @@ public class CatalogServiceImplementation implements CatalogService {
 		else
 			return true;
 	}
-
 }

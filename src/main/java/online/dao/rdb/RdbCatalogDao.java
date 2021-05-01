@@ -90,6 +90,11 @@ public class RdbCatalogDao implements AdvancedCatalogDao {
 		return this.catalogCrud.findAll(PageRequest.of(page, size)).getContent();
 	}
 	
+	@Override
+	public List<CatalogEntity> readAllByCatalogOnlineStore(int size, int page, String catalogOnlineStore) {
+		return this.catalogCrud.findAllByCatalogOnlineStore(catalogOnlineStore, PageRequest.of(page, size));
+	}
+	
 	public boolean checkDuplicates(CatalogEntity catalog) {
 		List<CatalogEntity> list = this.readAll();
 		for (CatalogEntity catalogEntity : list) {
@@ -97,9 +102,9 @@ public class RdbCatalogDao implements AdvancedCatalogDao {
 					&& catalog.getCatalogOnlineStore() == catalogEntity.getCatalogOnlineStore()
 					&& catalog.getCreatorEmail() == catalogEntity.getCreatorEmail()
 					&& catalog.isExpired() == catalogEntity.isExpired())
-				return false;
+				return true;
 		}
-		return true;
+		return false;
 	}
 
 }

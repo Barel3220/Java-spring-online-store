@@ -1,4 +1,4 @@
-package online;
+package online.integration;
 
 import static org.assertj.core.api.Assertions.assertThat;
 

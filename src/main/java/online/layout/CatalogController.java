@@ -63,6 +63,24 @@ public class CatalogController {
 			.toArray(new CatalogBoundary[0]); // CatalogBoundary[]
 	}
 	
+	@RequestMapping(
+			method=RequestMethod.GET,
+			path= "/onlinestore/catalogs/{catalogOnlineStore}",
+			produces=MediaType.APPLICATION_JSON_VALUE)
+	public CatalogBoundary[] getCatalogs (
+			@PathVariable("catalogOnlineStore") String catalogOnlineStore,
+			@RequestParam(name="size", required=false, defaultValue="10") int size, 
+			@RequestParam(name="page", required=false, defaultValue="0") int page) {
+		
+		return 
+			this.catalogService
+				.getCatalogsByCatalogOnlineStore(size, page, catalogOnlineStore) // CatalogEntity List	
+			.stream() // CatalogEntity Stream
+			.map(CatalogBoundary::new) // CatalogBoundary Stream
+			.collect(Collectors.toList()) // CatalogBoundary List
+			.toArray(new CatalogBoundary[0]); // CatalogBoundary[]
+	}
+	
 	@ExceptionHandler
 	@ResponseStatus(HttpStatus.NOT_FOUND)
 	public ErrorMessage handleException(CatalogNotFoundException e){

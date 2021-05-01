@@ -81,7 +81,8 @@ public class ActionServiceImplementation implements ActionService {
 				&& action.getOnlineStore() != null && !action.getOnlineStore().trim().isEmpty()
 				&& action.getPaymentMethod() != null && !action.getPaymentMethod().trim().isEmpty()
 				&& action.getTotalPrice() != 0.0
-				&& action.getAmount() != 0;
+				&& action.getAmount() != 0
+				&& (action.getPaymentMethod() == "CreditCard" || action.getPaymentMethod() == "PayPal");
 	}
 	
 	private boolean roles(String role) {

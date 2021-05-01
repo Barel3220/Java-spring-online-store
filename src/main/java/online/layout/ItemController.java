@@ -65,7 +65,7 @@ public class ItemController {
 	
 	@RequestMapping(
 			method=RequestMethod.GET,
-			path= "/onlinestore/admin/items/{userOnlineStore}/{userEmail}/{catalogId}",
+			path= "/onlinestore/items/{userOnlineStore}/{userEmail}/{catalogId}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public ItemBoundary[] getCatalogs (
 			@PathVariable("userOnlineStore") String userOnlineStore, 
