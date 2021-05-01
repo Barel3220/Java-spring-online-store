@@ -45,14 +45,15 @@ public class UserController {
 			path= "/onlinestore/admin/users/{adminOnlineStore}/{adminEmail}",
 			produces=MediaType.APPLICATION_JSON_VALUE)
 	public UserBoundary[] getUsers (
-			@PathVariable("adminOnlineStore") String smartspace, 
-			@PathVariable("adminEmail") String email,
+			@PathVariable("adminOnlineStore") String adminOnlineStore, 
+			@PathVariable("adminEmail") String adminEmail,
 			@RequestParam(name="size", required=false, defaultValue="10") int size, 
 			@RequestParam(name="page", required=false, defaultValue="0") int page) {
 		
+		String role = this.userService.checkUserRole(adminOnlineStore, adminEmail, "");
 		return 
 			this.userService
-				.getUsers(size, page, smartspace, email) // UserEntity List	
+				.getUsers(size, page, role) // UserEntity List	
 			.stream() // UserEntity Stream
 			.map(UserBoundary::new) // UserBoundary Stream
 			.collect(Collectors.toList()) // UserBoundary List
@@ -64,7 +65,7 @@ public class UserController {
 	public ErrorMessage handleException(UserNotFoundException e){
 		String message = e.getMessage();
 		if (message == null || message.trim().isEmpty()) {
-			message = "could not find user";
+			message = "Couldn't Find User";
 		}
 		return new ErrorMessage(message);
 	}
@@ -74,7 +75,7 @@ public class UserController {
 	public ErrorMessage handleException(UserRoleException e){
 		String message = e.getMessage();
 		if (message == null || message.trim().isEmpty()) {
-			message = "Admin does not have authority";
+			message = "Admin Doesn't Have Authority";
 		}
 		return new ErrorMessage(message);
 	}

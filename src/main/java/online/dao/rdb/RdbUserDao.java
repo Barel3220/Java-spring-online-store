@@ -15,7 +15,6 @@ import online.data.UserEntity;
 @Repository
 public class RdbUserDao implements AdvancedUserDao {
 	private UserCrud userCrud;
-	private String onlineStore;
 	
 	public RdbUserDao() {
 		// TODO Auto-generated constructor stub
@@ -28,10 +27,7 @@ public class RdbUserDao implements AdvancedUserDao {
 
 	@Override
 	@Transactional
-	public UserEntity create(UserEntity user) {
-		if (user.getUserOnlineStore() == null) 
-			user.setUserOnlineStore(onlineStore);
-		
+	public UserEntity create(UserEntity user) {		
 		user.setKey(user.getUserOnlineStore() + "#" + user.getUserEmail());
 		
 		// SQL: INSERT

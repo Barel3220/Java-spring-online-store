@@ -9,11 +9,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import online.aop.UserRoleValidation;
 import online.dao.AdvancedUserDao;
 import online.dao.UserNotFoundException;
 import online.dao.UserRoleException;
 import online.data.UserEntity;
-import online.data.UserRole;
 
 @Service
 public class UserServiceImplementation implements UserService {
@@ -36,9 +36,13 @@ public class UserServiceImplementation implements UserService {
 	}
 
 	@Override
-	public List<UserEntity> getUsers(int size, int page, String onlineStore, String userEmail) {
-		checkIfUserAdmin(onlineStore, userEmail);
-		return this.advancedUserDao.readAll(size, page);
+	public List<UserEntity> getUsers(int size, int page, String role) {
+		if (role == "null")
+			throw new UserNotFoundException("User Doesn't Exist");
+		else if (role != "admin")
+			throw new UserRoleException("User MUST be Admin to complete this operation");
+		else
+			return this.advancedUserDao.readAll(size, page);
 	}
 
 	@Override
@@ -46,15 +50,13 @@ public class UserServiceImplementation implements UserService {
 		Optional<UserEntity> user = this.advancedUserDao.readById(userOnlineStore + "#" + userEmail);
 		if(user.isPresent())
 			return user.get();
-		throw new UserNotFoundException("User doesn't exist");
+		throw new UserNotFoundException("User Doesn't Exist");
 	}
 	
-	public void checkIfUserAdmin(String smartspace, String email) {
-		String key = smartspace + "#" + email;
-		Optional<UserEntity> user = this.advancedUserDao.readById(key);
-		if (!user.isPresent()) throw new UserNotFoundException("Admin Doesn't Exist");
-		if(user.get().getRole() !=  UserRole.ADMIN)
-			throw new UserRoleException("User must be Admin!");
+	@Override
+	@UserRoleValidation
+	public String checkUserRole(String onlineStore, String userEmail, String role) {
+		return role;
 	}
 	
 	private boolean validateEmail(String userEmail) {

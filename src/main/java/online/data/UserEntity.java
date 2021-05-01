@@ -25,8 +25,8 @@ public class UserEntity implements OnlineStoreEntity<String> {
 	@Override
 	@Id
 	public String getKey() {
-		key = this.userOnlineStore + "#" + this.userEmail;
-		return key;
+		this.key = this.userOnlineStore + "#" + this.userEmail;
+		return this.key;
 	}
 
 	@Override

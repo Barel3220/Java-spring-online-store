@@ -6,6 +6,7 @@ import online.data.UserEntity;
 
 public interface UserService {
 	public UserEntity publishNewUser(UserEntity userEntity);
-	public List<UserEntity> getUsers (int size, int page, String onlineStore, String userEmail);
+	public List<UserEntity> getUsers (int size, int page, String role);
+	public String checkUserRole(String onlineStore, String userEmail, String role);
 	public UserEntity getSpecificUser(String userOnlineStore, String userEmail);
 }
